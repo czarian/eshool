@@ -1,0 +1,6 @@
+<% if user_signed_in? %>
+  curl -X GET --header 'Authorization: Bearer <%= JWTWrapper.encode({ user_id: current_user.id }) %>' 'http://localhost:3000/firsts'
+  <%= link_to "sign out", destroy_user_session_path, method: :delete %>
+  <%= Rails.application.secrets.jwt_expiration_hours.to_i.hours.from_now.to_i %>
+<% end %>
+
