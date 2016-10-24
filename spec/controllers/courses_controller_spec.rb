@@ -80,4 +80,28 @@
       end
     end
 
+    context 'check users permissions' do
+
+      let(:user_regular) { FactoryGirl.create(:user, role: "regular") }
+      let(:regular_token) { JWTWrapper.encode({ user_id: user_regular.id }) }
+
+      before(:each) do
+        controller.request.headers['Authorization'] = "Bearer #{regular_token}"
+      end
+
+      let!(:course) { FactoryGirl.build(:course)}
+
+      it 'prohibit creating new course' do
+        post :create, course: {
+            "name": course.name,
+            "description": course.description,
+            "status": course.status
+          }, :format => 'json'
+        expect(response.status).to eq(403)
+        body = JSON.parse(response.body)
+
+        expect(body['error']).to eq("You are not authorized to access this page.")
+      end
+    end
+
  end

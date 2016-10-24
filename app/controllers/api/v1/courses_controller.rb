@@ -2,6 +2,7 @@ module Api
   module V1
     class CoursesController < ApplicationController
       before_action :authenticate_user!
+      #load_and_authorize_resource
       before_action :set_course, only: [:show, :update]
 
       clear_respond_to
@@ -9,10 +10,12 @@ module Api
 
       def index
         @courses = Course.get_active
+        authorize! :read, @course
       end
 
       def update
         @find_course.update(course_params)
+        authorize! :update, @find_course
         render @find_course
       end
 
@@ -21,6 +24,7 @@ module Api
 
       def create
         @course = Course.new(course_params)
+        authorize! :create, @course
         if @course.save
           render @course, notice: 'Book added'
         else
