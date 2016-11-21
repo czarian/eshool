@@ -1,7 +1,8 @@
 module Api
   module V1
     class CoursesController < ApplicationController
-      before_action :authenticate_user!
+      before_filter :authenticate_user!
+      skip_before_action :verify_authenticity_token
       #load_and_authorize_resource
       before_action :set_course, only: [:show, :update]
 
@@ -9,8 +10,13 @@ module Api
       respond_to :json
 
       def index
-        @courses = Course.get_active
         authorize! :read, @course
+        @courses = Course.get_active
+        if @courses.count === 0
+          render :status => 404, :json => {
+            :errors => "Courses not found"
+          }.to_json
+        end
       end
 
       def update

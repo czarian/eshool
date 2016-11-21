@@ -1,1 +1,1 @@
-json.(course, :id, :name, :description)
+json.(course, :id, :name, :description, :created_at)

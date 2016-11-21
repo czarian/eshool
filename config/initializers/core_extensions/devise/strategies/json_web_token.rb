@@ -6,6 +6,7 @@ module Devise
       end
 
       def authenticate!
+
         return fail! unless claims
         return fail! unless claims.has_key?('user_id')
 

@@ -82,11 +82,11 @@
 
     context 'check users permissions' do
 
-      let(:user_regular) { FactoryGirl.create(:user, role: "regular") }
-      let(:regular_token) { JWTWrapper.encode({ user_id: user_regular.id }) }
+      let(:user_regullar) { FactoryGirl.create(:user, role: "regullar") }
+      let(:regullar_token) { JWTWrapper.encode({ user_id: user_regullar.id }) }
 
       before(:each) do
-        controller.request.headers['Authorization'] = "Bearer #{regular_token}"
+        controller.request.headers['Authorization'] = "Bearer #{regullar_token}"
       end
 
       let!(:course) { FactoryGirl.build(:course)}
@@ -102,6 +102,21 @@
 
         expect(body['error']).to eq("You are not authorized to access this page.")
       end
+    end
+
+    context 'with user permissions and without creating courses' do
+      let(:user_regullar) { FactoryGirl.create(:user, role: "regullar") }
+      let(:regullar_token) { JWTWrapper.encode({ user_id: user_regullar.id }) }
+      before(:each) do
+        controller.request.headers['Authorization'] = "Bearer #{regullar_token}"
+      end
+
+      it 'check index response status with no courses' do
+        get :index, format: :json#,  nil, {"Authorization" => "Bearer #{token}" }
+        expect(response.status).to eq(404)
+      end
+
+
     end
 
  end
