@@ -1,5 +1,5 @@
  require "rails_helper"
- RSpec.describe Api::V1::CoursesController, type: :controller do
+ RSpec.describe API::V1::CoursesController, type: :controller do
     render_views
     let(:current_user) { FactoryGirl.create(:user) }
 

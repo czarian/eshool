@@ -1,1 +1,1 @@
-@course, partial: 'api/v1/courses/course', as: :course
+json.partial! 'api/v1/courses/course', course: @find_course

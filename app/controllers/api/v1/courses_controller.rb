@@ -1,4 +1,4 @@
-module Api
+module API
   module V1
     class CoursesController < ApplicationController
       before_filter :authenticate_user!
@@ -45,7 +45,7 @@ module Api
       end
 
       def course_params
-        params.require(:course).permit(:name, :description, :status)
+        params.require(:course).permit(:id, :name, :description, :status)
       end
     end
 
