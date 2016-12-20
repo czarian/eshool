@@ -16,6 +16,9 @@ Rails.application.routes.draw do
       end
       resources :courses, :only => [:create, :update, :index, :show] do
         resources :lessons, :only => [:create, :update, :index, :show]
+        resources :exams, :only => [:create, :update, :index, :show] do
+          resources :questions, :only => [:create, :update, :index]
+        end
       end
     end
   end

@@ -11,7 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161124163913) do
+ActiveRecord::Schema.define(version: 20161130141337) do
+
+  create_table "answers", force: :cascade do |t|
+    t.string   "content"
+    t.boolean  "correct"
+    t.integer  "question_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "answers", ["question_id"], name: "index_answers_on_question_id"
 
   create_table "courses", force: :cascade do |t|
     t.string   "name"
@@ -20,6 +30,16 @@ ActiveRecord::Schema.define(version: 20161124163913) do
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
   end
+
+  create_table "exams", force: :cascade do |t|
+    t.string   "title"
+    t.integer  "status",     default: 1
+    t.integer  "course_id"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "exams", ["course_id"], name: "index_exams_on_course_id"
 
   create_table "lessons", force: :cascade do |t|
     t.string   "name"
@@ -30,6 +50,15 @@ ActiveRecord::Schema.define(version: 20161124163913) do
   end
 
   add_index "lessons", ["course_id"], name: "index_lessons_on_course_id"
+
+  create_table "questions", force: :cascade do |t|
+    t.string   "content"
+    t.integer  "exam_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "questions", ["exam_id"], name: "index_questions_on_exam_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",         null: false
