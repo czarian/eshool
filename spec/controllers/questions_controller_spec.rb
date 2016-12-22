@@ -92,12 +92,27 @@ RSpec.describe API::V1::QuestionsController, type: :controller do
           :format => 'json', :id=>question.id, :content_type => 'application/json'
 
           body = JSON.parse(response.body)
-          puts body
           expect(response.status).to eq(200)
           body['answers'].each do |answer|
             expect(answer['content']).to eq("New content")
           end
 
+      end
+
+      it 'delete answers' do
+        question.save
+        answers = []
+        question.answers.each do |answer|
+          if answer.id == 1
+            answers << {"id" => answer.id, "content" => "New content", "_destroy" => true,  "correct" => answer.correct}
+          end
+        end
+        put :update, course_id: course.id, :exam_id => exam.id,
+         question: { "answers_attributes": answers },
+          :format => 'json', :id=>question.id, :content_type => 'application/json'
+
+        body = JSON.parse(response.body)
+        expect(body['answers'].count).to eq(2)
       end
     end
 end

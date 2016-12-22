@@ -42,7 +42,7 @@ module API
       end
 
       def question_params
-        params.require(:question).permit(:content, answers_attributes: [:id, :content, :correct])
+        params.require(:question).permit(:content, answers_attributes: [:id, :content, :correct, :_destroy])
       end
 
     end
