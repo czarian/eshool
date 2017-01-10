@@ -3,15 +3,16 @@ module API
     class LessonsController < ApplicationController
       before_filter :authenticate_user!
       skip_before_action :verify_authenticity_token
-      before_action :set_lesson, only: [:show, :update]
+      load_and_authorize_resource
+      #before_action :set_lesson, only: [:show, :update]
 
       clear_respond_to
       respond_to :json
 
       def index
-        @lessons = Lesson.get_by_course_id params[:course_id]
+        #@lessons = Lesson.get_by_course_id params[:course_id]
 
-        authorize! :read, @lessons
+        #authorize! :read, @lessons
         if @lessons.count === 0
           render :status => 404, :json => {
             :errors => "Lessons not found"
@@ -19,9 +20,19 @@ module API
         end
       end
 
+      def show
+        if @lesson.blank?
+          render :status => 404, :json => {
+            :errors => "Course not found"
+          }.to_json
+        else
+          render @lesson
+        end
+      end
+
       def create
-        @lesson = Lesson.new(lesson_params)
-        authorize! :create, @lesson
+        #@lesson = Lesson.new(lesson_params)
+        #authorize! :create, @lesson
         if @lesson.save
           render @lesson, notice: 'Lesson added'
         else
@@ -30,9 +41,9 @@ module API
       end
 
       def update
-        @find_lesson.update(lesson_params)
-        authorize! :update, @find_lesson
-        render @find_lesson
+        @lesson.update(lesson_params)
+        #authorize! :update, @find_lesson
+        render @lesson
       end
 
       private

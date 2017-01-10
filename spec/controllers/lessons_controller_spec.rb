@@ -35,6 +35,12 @@ RSpec.describe API::V1::LessonsController, type: :controller do
         expect(body['errors']).to eq "Lessons not found"
       end
 
+      it 'try to show lesson' do
+        get :show, :course_id => course.id, :id => 1, :format => 'json'
+        body = JSON.parse(response.body)
+        expect(response.status).to eq(404)
+      end
+
     end
 
   context 'with login and with creating' do
@@ -61,6 +67,14 @@ RSpec.describe API::V1::LessonsController, type: :controller do
         body = JSON.parse(response.body)
         expect(response.status).to eq(200)
         expect(body['name']).to eq("new lesson name")
+    end
+
+    it 'show a lesson' do
+      get :show, :course_id => course.id, :id => lessons[0].id, :format => 'json'
+      body = JSON.parse(response.body);
+
+      expect(response.status).to eq(200)
+      expect(body["name"]).to eq(lessons[0].name)
     end
 
   end
@@ -107,6 +121,28 @@ RSpec.describe API::V1::LessonsController, type: :controller do
 
         expect(body['error']).to eq("You are not authorized to access this page.")
       end
+
+    end
+
+    context 'check regullar user with creating a lesson' do
+
+      let(:user_regullar) { FactoryGirl.create(:user, role: "regullar") }
+      let(:regullar_token) { JWTWrapper.encode({ user_id: user_regullar.id }) }
+
+      before(:each) do
+        controller.request.headers['Authorization'] = "Bearer #{regullar_token}"
+      end
+
+      let!(:lessons) { FactoryGirl.create_list(:lesson, 10, course: course) }
+
+      it 'show a lesson' do
+        get :show, :course_id => course.id, :id => lessons[0].id, :format => 'json'
+        body = JSON.parse(response.body);
+
+        expect(response.status).to eq(200)
+        expect(body["name"]).to eq(lessons[0].name)
+      end
+
     end
 
 end

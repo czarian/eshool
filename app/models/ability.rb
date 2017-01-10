@@ -9,9 +9,11 @@ class Ability
         can :manage, :all
     elsif user.role == "regullar"
 
-      can :read, [Answer,Course,Lesson,Question,User]
+      can :read, [Answer,Course,Lesson,User]
 
       can :read, Exam, :status => 2, :course_id => params[:course_id]
+
+      can :read, Question, :exam_id => params[:exam_id]
 
       can :create, UserExam
       can :update, UserExam, :user_id => user.id
