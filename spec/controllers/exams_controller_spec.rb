@@ -30,7 +30,6 @@ RSpec.describe API::V1::ExamsController, type: :controller do
         expect(body['errors']).to eq "Exams not found"
       end
     end
-
     context 'with login and creating as admin' do
 
       before(:each) do
@@ -40,7 +39,7 @@ RSpec.describe API::V1::ExamsController, type: :controller do
       let!(:exams) { FactoryGirl.create_list(:exam, 5, course: course) }
       let!(:exams_inProgress) { FactoryGirl.create_list(:exam, 5, course: course, status: 1) }
 
-      it 'get list of lesson' do
+      it 'get list of exam' do
         get :index, :course_id => course.id, :format => 'json'
 
         body = JSON.parse(response.body)
@@ -77,14 +76,16 @@ RSpec.describe API::V1::ExamsController, type: :controller do
         controller.request.headers['Authorization'] = "Bearer #{regullar_token}"
       end
 
-      it 'show only active exams to regullar user' do
+      it 'list only active exams to regullar user' do
         get :index, :course_id => course.id, :format => 'json'
+
         body = JSON.parse(response.body)
 
         body.each do |exam|
           expect(exam['exam_header']['status']).to eq("active")
         end
       end
+
     end
 
     context 'admin without creating' do
@@ -129,4 +130,5 @@ RSpec.describe API::V1::ExamsController, type: :controller do
         expect(body['error']).to eq("You are not authorized to access this page.")
       end
     end
+
 end
