@@ -104,7 +104,7 @@
       end
     end
 
-    context 'with user permissions and without creating courses' do
+    context 'with user and without creating courses' do
       let(:user_regullar) { FactoryGirl.create(:user, role: "regullar") }
       let(:regullar_token) { JWTWrapper.encode({ user_id: user_regullar.id }) }
       before(:each) do
@@ -112,10 +112,42 @@
       end
 
       it 'check index response status with no courses' do
-        get :index, format: :json#,  nil, {"Authorization" => "Bearer #{token}" }
+        get :index, format: :json
+        body = JSON.parse(response.body)
         expect(response.status).to eq(404)
       end
 
+      it 'return error when try to show non exist course' do
+        get 'show', :id => 1, :format => 'json'
+        body = JSON.parse(response.body)
+        expect(response.status).to eq(404)
+      end
+
+
+    end
+    context 'Regullar user with creating course' do
+
+      let(:user_regullar) { FactoryGirl.create(:user, role: "regullar") }
+      let(:regullar_token) { JWTWrapper.encode({ user_id: user_regullar.id }) }
+      let!(:course) { FactoryGirl.create(:course)}
+      before(:each) do
+        controller.request.headers['Authorization'] = "Bearer #{regullar_token}"
+      end
+
+
+      it 'check index response with course' do
+        get :index, :format => 'json'
+        body = JSON.parse(response.body)
+        expect(response.status).to eq(200)
+        expect(body[0]["name"]).to eq(course.name)
+      end
+
+      it 'shows course to user' do
+        get 'show', :id => course.id, :format => 'json'
+        body = JSON.parse(response.body)
+        expect(response.status).to eq(200)
+        expect(body['id']).to eq(course.id)
+      end
 
     end
 
