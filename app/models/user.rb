@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
+  has_many :user_exams
 
   ROLES = %i[admin regullar]
   devise :database_authenticatable, :registerable,

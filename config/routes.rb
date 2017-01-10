@@ -4,7 +4,6 @@ Rails.application.routes.draw do
     sessions: 'api/v1/sessions',
     registrations: 'api/v1/registrations'
   }, defaults: { format: :json }
-  resources :firsts
 
 
   namespace :api, :defaults => { :format => 'json' } do
@@ -18,6 +17,7 @@ Rails.application.routes.draw do
         resources :lessons, :only => [:create, :update, :index, :show]
         resources :exams, :only => [:create, :update, :index, :show] do
           resources :questions, :only => [:create, :update, :index]
+          resources :user_exams, :only => [:create, :index, :update, :show]
         end
       end
     end

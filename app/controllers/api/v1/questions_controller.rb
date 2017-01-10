@@ -23,7 +23,7 @@ module API
         @question = Question.new(question_params)
         authorize! :create, @question
         if @question.save
-          render @question, notice: 'Book added'
+          render @question, notice: 'Qusetion added'
         else
           render json status('false')
         end

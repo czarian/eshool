@@ -1,6 +1,7 @@
 class Exam < ActiveRecord::Base
   belongs_to :course
-  has_many :exams
+  has_many :user_exams
+  has_many :questions
 
   enum status: [:inactive, :inProgress, :active]
 

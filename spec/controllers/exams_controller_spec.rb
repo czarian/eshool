@@ -47,8 +47,8 @@ RSpec.describe API::V1::ExamsController, type: :controller do
 
         expect(response.status).to eq(200)
         5.times do |i|
-          expect(body[i]['title']).to eq "Exam #{i+1} course #{course.id} name"
-          expect(body[i+5]['status']).to eq "inProgress"
+          expect(body[i]['exam_header']['title']).to eq "Exam #{i+1} course #{course.id} name"
+          expect(body[i+5]['exam_header']['status']).to eq "inProgress"
         end
 
       end
@@ -58,7 +58,7 @@ RSpec.describe API::V1::ExamsController, type: :controller do
          exam: { "title": "new exam title" }, :format => 'json', :id=>2, :content_type => 'application/json'
         body = JSON.parse(response.body)
         expect(response.status).to eq(200)
-        expect(body['title']).to eq("new exam title")
+        expect(body['exam_header']['title']).to eq("new exam title")
       end
 
 
@@ -82,7 +82,7 @@ RSpec.describe API::V1::ExamsController, type: :controller do
         body = JSON.parse(response.body)
 
         body.each do |exam|
-          expect(exam['status']).to eq("active")
+          expect(exam['exam_header']['status']).to eq("active")
         end
       end
     end
@@ -102,8 +102,8 @@ RSpec.describe API::V1::ExamsController, type: :controller do
           body = JSON.parse(response.body)
 
           expect(response.status).to eq(200)
-          expect(body['title']).to eq(exam.title)
-          expect(body['status']).to eq('inProgress')
+          expect(body['exam_header']['title']).to eq(exam.title)
+          expect(body['exam_header']['status']).to eq('inProgress')
       end
     end
 

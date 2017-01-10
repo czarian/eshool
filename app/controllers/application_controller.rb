@@ -10,4 +10,8 @@ class ApplicationController < ActionController::Base
         }.to_json
   end
 
+  def current_ability
+    @current_ability ||= Ability.new(current_user, params)
+  end
+
 end

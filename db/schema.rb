@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161130141337) do
+ActiveRecord::Schema.define(version: 20161227135756) do
 
   create_table "answers", force: :cascade do |t|
     t.string   "content"
@@ -59,6 +59,32 @@ ActiveRecord::Schema.define(version: 20161130141337) do
   end
 
   add_index "questions", ["exam_id"], name: "index_questions_on_exam_id"
+
+  create_table "user_answers", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "question_id"
+    t.integer  "answer_id"
+    t.boolean  "correct",      default: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.integer  "user_exam_id"
+  end
+
+  add_index "user_answers", ["answer_id"], name: "index_user_answers_on_answer_id"
+  add_index "user_answers", ["question_id"], name: "index_user_answers_on_question_id"
+  add_index "user_answers", ["user_id"], name: "index_user_answers_on_user_id"
+
+  create_table "user_exams", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "exam_id"
+    t.integer  "score",      default: 0
+    t.boolean  "passed",     default: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  add_index "user_exams", ["exam_id"], name: "index_user_exams_on_exam_id"
+  add_index "user_exams", ["user_id"], name: "index_user_exams_on_user_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",         null: false
