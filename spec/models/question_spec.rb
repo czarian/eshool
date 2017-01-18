@@ -9,9 +9,6 @@ RSpec.describe Question, type: :model do
 
     it "success" do
       #question = FactoryGirl.build(:question, exam: exam)
-      question.answers.each do |answer|
-        puts answer.correct
-      end
       expect(question.save).to eq true
 
     end
