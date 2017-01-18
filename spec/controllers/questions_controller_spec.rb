@@ -81,6 +81,16 @@ RSpec.describe API::V1::QuestionsController, type: :controller do
             expect(body['answers'].count).to eq(answers.count)
       end
 
+      it 'prohibit creating question without answers' do
+        post :create, course_id: course.id, :exam_id => exam.id,
+           question: {
+              "content": question.content,
+            }, :format => 'json'
+
+        body = JSON.parse(response.body)
+        expect(body["errors"]["answers"][0]).to eq("can't be blank")
+      end
+
       it 'update answers' do
         question.save
         answers = []

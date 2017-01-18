@@ -28,7 +28,9 @@ module API
         if @question.save
           render @question, notice: 'Qusetion added'
         else
-          render json status('false')
+          render :status => 400, :json => {
+            :errors => @question.errors.as_json
+          }.to_json
         end
       end
 
