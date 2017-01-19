@@ -5,5 +5,7 @@ class UserExam < ActiveRecord::Base
 
   accepts_nested_attributes_for :user_answers, :allow_destroy => true
 
+  validates_associated :user_answers
+
   scope :get_by_user_id_exam_id, -> (user_id, exam_id) {where(:user_id => user_id, :exam_id => exam_id) }
 end

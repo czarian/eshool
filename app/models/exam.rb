@@ -5,6 +5,8 @@ class Exam < ActiveRecord::Base
 
   enum status: [:inactive, :inProgress, :active]
 
+  validates :title, presence: true, length: {minimum: 10, maximum: 255}
+
   scope :get_active, -> {where("status = 2") }
 
 end
